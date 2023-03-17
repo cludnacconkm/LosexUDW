@@ -8,7 +8,6 @@ workflowNames = [
     "Lint",
     "linux-binary-libtorch-pre-cxx11",
     "android-tests",
-    "windows-binary-wheel",
     "periodic",
     "docker-release-builds",
     "nightly",
@@ -31,8 +30,7 @@ class TestChecks:
             workflow_checks.append(WorkflowCheck(
                 workflowName=workflowNames[i],
                 name="test/job",
-                jobName="job",
-                conclusion="success",
+                jobName="job"
             )._asdict())
         return workflow_checks
 
@@ -45,10 +43,8 @@ class TestPrintCommits(TestCase):
 
     @mock.patch('fetch_latest_green_commit.get_commit_results', return_value=TestChecks().make_test_checks())
     def test_necessary_successful(self, mock_get_commit_results: Any) -> None:
-        "Test with necessary workflows are successful"
-        workflow_checks = mock_get_commit_results()
+
         workflow_checks = set_workflow_job_status(workflow_checks, workflowNames[8], "failed")
-        workflow_checks = set_workflow_job_status(workflow_checks, workflowNames[9], "failed")
         workflow_checks = set_workflow_job_status(workflow_checks, workflowNames[10], "failed")
         workflow_checks = set_workflow_job_status(workflow_checks, workflowNames[11], "failed")
         workflow_checks = set_workflow_job_status(workflow_checks, workflowNames[12], "failed")
